@@ -36,24 +36,12 @@ public static class ArraysTester
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
 
 
-
-    // <plan>
-
-    // Here's a plan to implement the `MultiplesOf` function:
-
-    // 1.Initialize an empty list to store the multiples.
-    // 2.Start a loop from 1 to `length`, inclusive.
-    // 3.Inside the loop, multiply the `number` by the loop index and add the result to the list.
-    // 4.After the loop, return the list containing the multiples.
-
-    // </plan>
     private static double[] MultiplesOf(double number, int length)
     {
         // TODO Problem 1 Start
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
-
 
 
 
@@ -97,6 +85,8 @@ public static class ArraysTester
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+
 
 
         // This is my plan to implement the `RotateListRight` function:
