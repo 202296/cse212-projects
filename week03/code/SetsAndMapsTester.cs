@@ -1,7 +1,9 @@
 using System.Text.Json;
 
-public static class SetsAndMapsTester {
-    public static void Run() {
+public static class SetsAndMapsTester
+{
+    public static void Run()
+    {
         // Problem 1: Find Pairs with Sets
         Console.WriteLine("\n=========== Finding Pairs TESTS ===========");
         DisplayPairs(new[] { "am", "at", "ma", "if", "fi" });
@@ -107,10 +109,26 @@ public static class SetsAndMapsTester {
     /// that there were no duplicates) and therefore should not be displayed.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
-    private static void DisplayPairs(string[] words) {
+    private static void DisplayPairs(string[] words)
+    {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+        var seenWords = new HashSet<string>();
+
+        foreach (var word in words)
+        {
+            var reversedWord = new string(word.Reverse().ToArray());
+
+            if (seenWords.Contains(reversedWord))
+            {
+                Console.WriteLine($"{word} & {reversedWord}");
+            }
+            else
+            {
+                seenWords.Add(word);
+            }
+        }
     }
 
     /// <summary>
@@ -127,11 +145,23 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 2 #
     /// #############
-    private static Dictionary<string, int> SummarizeDegrees(string filename) {
+    private static Dictionary<string, int> SummarizeDegrees(string filename)
+    {
         var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename)) {
+        foreach (var line in File.ReadLines(filename))
+        {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3].Trim();
+
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -156,15 +186,116 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 3 #
     /// #############
-    private static bool IsAnagram(string word1, string word2) {
+    private static bool IsAnagram(string word1, string word2)
+    {
         // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Normalize strings: convert to lowercase and remove spaces
+        word1 = NormalizeString(word1);
+        word2 = NormalizeString(word2);
+
+        // Check if lengths are different
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+
+        // Convert strings to character arrays and sort
+        char[] charArray1 = word1.ToCharArray();
+        char[] charArray2 = word2.ToCharArray();
+
+        Array.Sort(charArray1);
+        Array.Sort(charArray2);
+
+        // Compare sorted char arrays
+        for (int i = 0; i < charArray1.Length; i++)
+        {
+            if (charArray1[i] != charArray2[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static string NormalizeString(string str)
+    {
+        // Convert to lowercase and remove spaces
+        return new string(str.ToLower().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+
     }
 
     /// <summary>
     /// Sets up the maze dictionary for problem 4
     /// </summary>
-    private static Dictionary<ValueTuple<int, int>, bool[]> SetupMazeMap() {
+
+    public class Maze
+    {
+        private Dictionary<(int, int), bool[]> map;
+        private (int x, int y) position;
+
+        public Maze(Dictionary<(int, int), bool[]> map)
+        {
+            this.map = map;
+            this.position = (1, 1);
+        }
+
+        public void MoveLeft()
+        {
+            if (map[position][0])
+            {
+                position.x--;
+            }
+            else
+            {
+                Console.WriteLine("Error: Cannot move left.");
+            }
+        }
+
+        public void MoveRight()
+        {
+            if (map[position][1])
+            {
+                position.x++;
+            }
+            else
+            {
+                Console.WriteLine("Error: Cannot move right.");
+            }
+        }
+
+        public void MoveUp()
+        {
+            if (map[position][2])
+            {
+                position.y--;
+            }
+            else
+            {
+                Console.WriteLine("Error: Cannot move up.");
+            }
+        }
+
+        public void MoveDown()
+        {
+            if (map[position][3])
+            {
+                position.y++;
+            }
+            else
+            {
+                Console.WriteLine("Error: Cannot move down.");
+            }
+        }
+
+        public void ShowStatus()
+        {
+            Console.WriteLine($"Current position: ({position.x}, {position.y})");
+        }
+    }
+
+    private static Dictionary<ValueTuple<int, int>, bool[]> SetupMazeMap()
+    {
         Dictionary<ValueTuple<int, int>, bool[]> map = new() {
             { (1, 1), new[] { false, true, false, true } },
             { (1, 2), new[] { false, true, true, false } },
@@ -220,7 +351,24 @@ public static class SetsAndMapsTester {
     /// https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
     /// 
     /// </summary>
-    private static void EarthquakeDailySummary() {
+    public class FeatureCollection
+    {
+        public List<Feature> Features { get; set; }
+    }
+
+    public class Feature
+    {
+        public Properties Properties { get; set; }
+    }
+
+    public class Properties
+    {
+        public string Place { get; set; }
+        public double? Mag { get; set; }
+    }
+
+    private static void EarthquakeDailySummary()
+    {
         const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
         using var client = new HttpClient();
         using var getRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -235,5 +383,17 @@ public static class SetsAndMapsTester {
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+
+        if (featureCollection?.Features != null)
+        {
+            foreach (var feature in featureCollection.Features)
+            {
+                if (feature.Properties != null && feature.Properties.Mag.HasValue)
+                {
+                    Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag.Value}");
+                }
+            }
+        }
+
     }
 }
