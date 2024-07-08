@@ -19,7 +19,7 @@
             players.GetNextPerson();
         // Expected: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
 
-        // Defect(s) Found: No defect found
+        // Defect(s) Found: Sue, Sue, Sue, Tim, Tim, Tim, Tim, Tim, Bob, Bob
 
         Console.WriteLine("---------");
 
@@ -44,7 +44,7 @@
             players.GetNextPerson();
         // Expected: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
 
-        // Defect(s) Found: No defect found
+        // Defect(s) Found: Sue, Sue, Sue, Tim, Tim, George, George, George, Tim, Tim, Tim, Bob, Bob
 
         Console.WriteLine("---------");
 
@@ -65,7 +65,7 @@
         }
         // Expected: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
 
-        // Defect(s) Found: No defect found
+        // Defect(s) Found: Sue, Sue, Sue, Tim, Bob, Bob, No one in the queue., No one in the queue., No one in the queue., No one in the queue.
 
         Console.WriteLine("---------");
 
@@ -85,7 +85,7 @@
         }
         // Expected: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
 
-        // Defect(s) Found: No defect found
+        // Defect(s) Found: Sue, Sue, Sue, Tim, No one in the queue., No one in the queue., No one in the queue., No one in the queue., No one in the queue., No one in the queue.
 
         Console.WriteLine("---------");
 
@@ -97,6 +97,6 @@
         players.GetNextPerson();
         // Expected: No one in the queue.
 
-        // Defect(s) Found: No defect found
+        // Defect(s) Found: No one in the queue.
     }
 }
